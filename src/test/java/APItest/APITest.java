@@ -1,10 +1,10 @@
 package APItest;
 
 import Requests.DELETE_Request;
-import Requests.GET_Request;
 import Requests.POST_Request;
 import Requests.PUT_Request;
-import io.restassured.path.json.JsonPath;
+import fakerestapi.GetAuthors;
+import fakerestapi.fakerestserver;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -12,24 +12,23 @@ import io.restassured.response.Response;
 
 public class APITest {
 
-    private String baseUrl = "https://fakerestapi.azurewebsites.net";
-    private String endpoint = "api/v1/Authors";
-    private GET_Request getRequest;
-    private POST_Request postRequest;
-    private PUT_Request putRequest;
-    private DELETE_Request deleteRequest;
+
+    private GetAuthors getAuthors;
+    private POST_Request postRequest; //make postAuthors same as get
+    private PUT_Request putRequest; //make puttAuthors same as get
+    private DELETE_Request deleteRequest; //make deleteAuthors same as get
 
     @BeforeTest
     public void setup() {
-        getRequest = new GET_Request(baseUrl, endpoint);
-        postRequest = new POST_Request(baseUrl, endpoint);
-        putRequest = new PUT_Request(baseUrl, endpoint);
-        deleteRequest = new DELETE_Request(baseUrl, endpoint);
+        getAuthors = new GetAuthors();
+        postRequest = new POST_Request(fakerestserver.baseUrl, fakerestserver.authors_endpoint); //make postAuthors same as get
+        putRequest = new PUT_Request(fakerestserver.baseUrl,fakerestserver.authors_endpoint); //make puttAuthors same as get
+        deleteRequest = new DELETE_Request(fakerestserver.baseUrl,fakerestserver.authors_endpoint); //make deleteAuthors same as get
     }
 
     @Test
     public void testGetRequest() {
-        Response getResponse = getRequest.sendRequest("GET");
+        Response getResponse = getAuthors.send();
         Assert.assertEquals(getResponse.getStatusCode(), 200);
         String responseBody = getResponse.getBody().asString();
         System.out.println("Author Info:\n" + responseBody);
@@ -51,4 +50,5 @@ public class APITest {
     public void testDeleteRequest() {
         Response deleteResponse = deleteRequest.sendDeleteRequest();
     }
+
 }

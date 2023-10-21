@@ -1,6 +1,6 @@
 package Requests;
 
-import Requests.BaseRequest;
+import io.restassured.response.Response;
 
 public class GET_Request extends BaseRequest {
 
@@ -10,5 +10,8 @@ public class GET_Request extends BaseRequest {
 
     public void addQueryParameter(String param, String value) {
         requestSpec.queryParam(param, value);
+    }
+    public Response send() {
+        return requestSpec.request("GET");
     }
 }
